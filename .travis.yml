@@ -8,11 +8,15 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+#      - deadsnakes
     packages:
       - cmake
       - g++-6
       - libpthread-stubs0-dev
       - libstdc++-6-dev
+      - python3
+      - python3-dev
+      - swig3.0
 
 # cache:
 #   directories:

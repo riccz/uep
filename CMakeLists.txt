@@ -34,7 +34,7 @@ string(REPLACE "\n" "" GIT_COMMIT_SHA1 ${GIT_COMMIT_SHA1})
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-find_package(PythonLibs 3.5 REQUIRED)
+find_package(PythonLibs 3.4 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 link_libraries(${PYTHON_LIBRARIES})
 
