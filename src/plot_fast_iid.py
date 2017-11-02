@@ -47,9 +47,13 @@ for per in iid_pers:
 
 with multiprocessing.Pool() as pool:
     result_matrix = list()
+    tot_pts = sum([len(e) for e in param_matrix])
+    done_pts = 0
     for ps in param_matrix:
         r = pool.map(run_uep_map, ps)
         result_matrix.append(r)
+        done_pts += len(r)
+        print("{:d}/{:d} done".format(done_pts, tot_pts))
 
 plt.figure()
 plt.gca().set_yscale('log')
@@ -78,12 +82,15 @@ ts = int(datetime.datetime.now().timestamp())
 
 plt.savefig('plot_fast_iid.pdf', format='pdf')
 plotkey = "fast_plots/iid_{:d}_{:d}.pdf".format(ts, newid)
-s3.meta.client.upload_file('plot_fast_iid.pdf',
-                           'uep.zanol.eu',
-                           plotkey,
-                           ExtraArgs={'ACL': 'public-read'})
-ploturl = ("https://s3.amazonaws.com/"
-           "uep.zanol.eu/{!s}".format(plotkey))
-print("Uploaded IID plot at {!s}".format(ploturl))
+try:
+    s3.meta.client.upload_file('plot_fast_iid.pdf',
+                               'uep.zanol.eu',
+                               plotkey,
+                               ExtraArgs={'ACL': 'public-read'})
+    ploturl = ("https://s3.amazonaws.com/"
+               "uep.zanol.eu/{!s}".format(plotkey))
+    print("Uploaded IID plot at {!s}".format(ploturl))
+except RuntimeError as e:
+    print("Plot upload failed: {!s}".format(e))
 
 plt.show()
