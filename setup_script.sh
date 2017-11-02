@@ -33,5 +33,8 @@ pushd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j$(( $(nproc) + 1))
 
+export MPLBACKEND="PDF"
+echo 'export MPLBACKEND="PDF"' >> ~/.profile
+
 popd
 popd
