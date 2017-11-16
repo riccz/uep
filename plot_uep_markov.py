@@ -106,8 +106,11 @@ if __name__ == "__main__":
     assert(callable(param_filter))
 
     p = plots()
-    p.automaticXScale = True
-    #p.automaticXScale = [0,0.3]
+    if args.param_filter == 'error_free':
+        p.automaticXScale = [0, 6000]
+    else:
+        p.automaticXScale = True
+
     p.automaticYScale = [1e-8, 1]
     p.add_plot(plot_name='per',xlabel='K',ylabel='PER',logy=True)
     p.add_plot(plot_name='nblocks',xlabel='K',ylabel='nblocks',logy=False)
