@@ -173,6 +173,7 @@ if __name__ == "__main__":
                 'merged': True,
                 'k_blocks': k_blocks,
                 'Ks_frac': Ks_frac,
+                'used_Ks': used_Ks,
                 'RFs': RFs,
                 'EF': EF,
                 'c': c,
