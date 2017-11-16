@@ -5,20 +5,25 @@ set -eu -o pipefail
 
 export MPLBACKEND=PDF
 
-nblocks=5000
+nblocks=10000
 
 # Case 1: error-free channel
-echo "Running error-free"
-for rf in 1 5; do
-    for ef in 1 2 4; do
-	python3 run_uep_iid.py --iid_per 0 "$rf" "$ef" "$nblocks"
+echo "Running error-free EEP"
+rf=1
+ef=1
+python3 run_uep_iid.py --iid_per 0 "$rf" "$ef" "$nblocks"
+echo "OK with RF = $rf, EF = $ef"
+
+echo "Running error-free UEP"
+rf=5
+for ef in 1 4; do
+    python3 run_uep_iid.py --iid_per 0 "$rf" "$ef" "$nblocks"
     echo "OK with RF = $rf, EF = $ef"
-    done
 done
 
 # Case 2: IID errors
 echo "Running IID with RF = 5, EF = 2"
-for p in 0.01 0.1 0.2 0.3; do
+for p in 0.01 0.1 0.3; do
     python3 run_uep_iid.py --iid_per "$p" 5 2 "$nblocks"
     echo "OK with iid_per = $p"
 done

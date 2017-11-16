@@ -18,19 +18,30 @@ class param_filters:
 
     @staticmethod
     def error_free(RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
-        return (avg_per == 0 and avg_bad_run == 1)
+        return (
+            avg_per == 0 and avg_bad_run == 1 and (
+                RFs in [(1,1), (5,1)]
+            )
+        )
 
     @staticmethod
-    def br5(RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
-        return (avg_bad_run == 5)
+    def br(wanted_br, RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
+        return (
+            avg_bad_run == wanted_br and
+            RFs in [(1,1), (5,1)]
+        )
 
     @staticmethod
-    def br10(RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
-        return (avg_bad_run == 10)
+    def br5(*args):
+        return br(5, *args)
 
     @staticmethod
-    def br50(RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
-        return (avg_bad_run == 50)
+    def br10(*args):
+        return br(10, *args)
+
+    @staticmethod
+    def br50(*args):
+        return br(50, *args)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Plots the Markov UEP results.',

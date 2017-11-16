@@ -11,7 +11,7 @@ overhead=0.3
 # Case 1: error-free vs K
 ef=1
 echo "Running error-free"
-for rf in 1 3 5; do
+for rf in 1 5; do
     python3 run_uep_markov.py --overhead "$overhead" \
 	    "$rf" "$ef" "$nblocks" "inf" 1
     echo "OK with RF = $rf"
@@ -20,7 +20,7 @@ done
 # Cases 3,4,5: vary EnB and pi_B
 piB=(10 100) # ! 1/pi_B !
 EnB=(5 10 50)
-rfs=(1 3 5)
+rfs=(1 5)
 ef=1
 echo "Running correlated"
 for pib in ${piB[*]}; do

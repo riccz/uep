@@ -19,11 +19,29 @@ class param_filters:
 
     @staticmethod
     def error_free(Ks, RFs, EF, c, delta, iid_per):
-        return (iid_per == 0)
+        return (
+            iid_per == 0 and (
+                (RFs == (1,1) and EF == 1) or
+                (RFs == (5,1) and EF in [1, 4])
+            )
+        )
 
     @staticmethod
     def iid_errors(Ks, RFs, EF, c, delta, iid_per):
-        return (iid_per != 0)
+        return (
+            iid_per in [0.01 0.1 0.3] and
+            RFs == (5,2)
+        )
+
+    @staticmethod
+    def only_eep(Ks, RFs, EF, c, delta, iid_per):
+        return len(Ks) == 1 or all(rf == 1 for rf in RFs)
+
+    @staticmethod
+    def only_uep_zero(Ks, RFs, EF, c, delta, iid_per):
+        return (len(Ks) > 1 and
+                any(rf > 1 for rf in RFs) and
+                iid_per == 0)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Plots the IID UEP results.',
