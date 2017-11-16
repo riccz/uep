@@ -26,7 +26,15 @@ if __name__ == "__main__":
     parser.add_argument("--k_max", help="Take only K <= this",
                         type=float,
                         default=float('inf'))
+    parser.add_argument("--kmin", help="k_min",type=int)
+    parser.add_argument("--kmax", help="k_max",type=int)
+
     args = parser.parse_args()
+
+    if args.kmin is not None:
+        args.k_min = args.kmin
+    if args.kmax is not None:
+        args.k_max = args.kmax
 
     git_sha1 = None
     try:
