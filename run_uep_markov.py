@@ -64,9 +64,9 @@ if __name__ == "__main__":
     k_blocks += np.linspace(100, 2100, 11, dtype=int)[:-1].tolist()
     k_blocks = sorted(set(k_blocks))
 
-    k_blocks = [filter(lambda k: (k >= args.k_min and
-                                  k <= args.k_max),
-                       k_blocks)]
+    k_blocks = list(filter(lambda k: (k >= args.k_min and
+                                      k <= args.k_max),
+                           k_blocks))
 
     used_rngstate = random.getstate()
 

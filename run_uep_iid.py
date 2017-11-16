@@ -60,9 +60,9 @@ if __name__ == "__main__":
 
     overheads = np.linspace(0, 0.8, 33)
 
-    overheads = [filter(lambda oh: (oh >= args.overhead_min and
-                                    oh <= args.overhead_max),
-                        overheads)]
+    overheads = list(filter(lambda oh: (oh >= args.overhead_min and
+                                        oh <= args.overhead_max),
+                            overheads))
 
     used_rngstate = random.getstate()
 
