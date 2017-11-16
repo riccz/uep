@@ -28,5 +28,6 @@ for i, k in items:
                                      i.get('delta', -1),
                                      i.get('iid_per', -1))
     print("Key = " + k)
+    print("  timestamp = {!s}".format(datetime.datetime.fromtimestamp(i.get('timestamp', 0))))
     print("  " + legend_str)
     print()
