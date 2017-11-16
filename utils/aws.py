@@ -66,13 +66,11 @@ def load_data(key):
     return pickle.loads(lzma.decompress(bindata))
 
 def load_data_prefix(prefix, filter_func=None):
-    s3 = boto3.client('s3')
-    resp = s3.list_objects_v2(Bucket='uep.zanol.eu',
-                              Prefix=prefix)
+    bucket = boto3.resource('s3').Bucket('uep.zanol.eu')
     items = list()
-    for obj in resp['Contents']:
+    for obj in bucket.objects.filter(Prefix=prefix):
         if filter_func is None or filter_func(obj):
-            items.append(load_data(obj['Key']))
+            items.append(load_data(obj.key))
     return items
 
 def load_data_local(filename):
