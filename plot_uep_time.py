@@ -43,7 +43,7 @@ if __name__ == "__main__":
     ]
 
     if len(wanted_commits) > 0:
-        data = [filter(lambda d: d.get('git_sha1') in wanted_commits, data)]
+        data = list(filter(lambda d: d.get('git_sha1') in wanted_commits, data))
 
     print("Using {:d} data packs".format(len(data)))
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
                                               d['c'],
                                               d['delta']) == params]
         if len(data_same_pars) > 1:
-            print("Cannot average the execution times", file=sys.stderr)
+            print("Cannot average the execution times")
             sys.exit(1)
 
         Ks = params[0]
