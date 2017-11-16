@@ -22,15 +22,16 @@ class param_filters:
         return (
             iid_per == 0 and (
                 (RFs == (1,1) and EF == 1) or
-                (RFs == (5,1) and EF in [1, 4])
+                (RFs == (5,1) and EF in [1, 2])
             )
         )
 
     @staticmethod
     def iid_errors(Ks, RFs, EF, c, delta, iid_per):
         return (
-            iid_per in [0.01 0.1 0.3] and
-            RFs == (5,2)
+            any(math.isclose(iid_per, wp)
+                for wp in [0.01, 0.1, 0.3]) and
+            RFs == (5,1)
         )
 
     @staticmethod

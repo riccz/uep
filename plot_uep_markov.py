@@ -33,15 +33,31 @@ class param_filters:
 
     @staticmethod
     def br5(*args):
-        return br(5, *args)
+        return param_filters.br(5, *args)
 
     @staticmethod
     def br10(*args):
-        return br(10, *args)
+        return param_filters.br(10, *args)
 
     @staticmethod
     def br50(*args):
-        return br(50, *args)
+        return param_filters.br(50, *args)
+
+    @staticmethod
+    def pi100(RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
+        return (
+            avg_per != 0 and
+            math.isclose(1/avg_per, 100) and
+            RFs in [(1,1), (5,1)]
+        )
+
+    @staticmethod
+    def pi10(RFs, EF, c, delta, overhead, avg_per, avg_bad_run, Ks_frac):
+        return (
+            avg_per != 0 and
+            math.isclose(1/avg_per, 10) and
+            RFs in [(1,1), (5,1)]
+        )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Plots the Markov UEP results.',

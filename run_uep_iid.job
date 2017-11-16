@@ -16,7 +16,7 @@ echo "OK with RF = $rf, EF = $ef"
 
 echo "Running error-free UEP"
 rf=5
-for ef in 1 4; do
+for ef in 1 2; do
     python3 run_uep_iid.py --iid_per 0 "$rf" "$ef" "$nblocks"
     echo "OK with RF = $rf, EF = $ef"
 done
