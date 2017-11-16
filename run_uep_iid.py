@@ -18,6 +18,12 @@ if __name__ == "__main__":
     parser.add_argument("ef", help="Expanding factor",type=int)
     parser.add_argument("nblocks", help="nblocks for the simulation",type=int)
     parser.add_argument("--iid_per", help="Channel packet drop rate",type=float, default=0)
+    parser.add_argument("--overhead_min", help="Take only overheads >= this",
+                        type=float,
+                        default=float('-inf'))
+    parser.add_argument("--overhead_max", help="Take only overheads <= this",
+                        type=float,
+                        default=float('inf'))
     args = parser.parse_args()
 
     git_sha1 = None
@@ -52,12 +58,11 @@ if __name__ == "__main__":
     sim = UEPSimulation(Ks=Ks, RFs=RFs, EF=EF, c=c, delta=delta,
                         nblocks=nblocks, iid_per=iid_per)
 
-    #oh = set(np.linspace(0,0.4,16))
-    #oh.update(np.linspace(0,0.1,16))
-    #oh.update(np.linspace(0.2,0.3,16))
-    #oh = sorted(oh)
-    #overheads = np.array(oh[20:])
     overheads = np.linspace(0, 0.8, 33)
+
+    overheads = [filter(lambda oh: (oh >= args.overhead_min and
+                                    oh <= args.overhead_max),
+                        overheads)]
 
     used_rngstate = random.getstate()
 
