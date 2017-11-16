@@ -65,13 +65,28 @@ def load_data(key):
 
     return pickle.loads(lzma.decompress(bindata))
 
-def load_data_prefix(prefix, filter_func=None):
+def load_data_prefix_2(prefix, filter_func=None):
+    """Get all S3 objects matching `prefix`. They are returned as a list
+    of (body, key) pairs. If filter_func is not None, only the objects
+    for which filter_func(obj) is True are returned. The filter_func
+    is called with objects of type boto3.S3.ObjectSummary.
+
+    """
+
     bucket = boto3.resource('s3').Bucket('uep.zanol.eu')
     items = list()
     for obj in bucket.objects.filter(Prefix=prefix):
         if filter_func is None or filter_func(obj):
-            items.append(load_data(obj.key))
+            items.append((load_data(obj.key), obj.key))
     return items
+
+def load_data_prefix(prefix, filter_func=None):
+    """Same as load_data_prefix_2, but return only a list of object
+    bodies.
+
+    """
+
+    return [i[0] for i in load_data_prefix_2(prefix, filter_func)]
 
 def load_data_local(filename):
     data = lzma.decompress(open(filename,'rb').read())
