@@ -348,7 +348,7 @@ corrisponde un numero di pacchetti inviati $N \in [2000, 3600]$ per
 ogni blocco di $K=K_0+K_1$ pacchetti.
 %
 La probabilità di errore del canale è stata impostata ai valori $e \in
-\left\{10^{-2}, 10^{-1}, 2 \cdot 10^{-1} \right\}$, oltre al caso
+\left\{10^{-2}, 10^{-1}, 3 \cdot 10^{-1} \right\}$, oltre al caso
 senza errori con $e=0$.
 
 Nelle figure~\ref{fig:zero_oh} e~\ref{fig:iid_oh} sono mostrati i
@@ -361,6 +361,11 @@ risultati della simulazione di 10000 blocchi.
     senza errori.}
   \label{fig:zero_oh}
 \end{figure}
+% Plot notes:
+% better EEP EF=1 for 0.2 - 0.4 -> [8:17] or more
+% Remove EEP EF>1 because worse PER after oh=0.18
+% UEP EF = 4: better points in [4:17]
+% UEP EF = 2: better points in [11:17]
 %
 \begin{figure}[htb]
   \centering
@@ -369,6 +374,17 @@ risultati della simulazione di 10000 blocchi.
     iid.}
   \label{fig:iid_oh}
 \end{figure}
+% Plot notes:
+% more points everywhere
+
+% Markov plot notes:
+% Error-free:
+% EEP is good, more between 2000-4000 -> [8:12]
+% UEP RF=5 more points everywhere for the LIB +
+%   [4:9]
+%
+% BR5:
+% 
 
 Nel caso senza errori (figura~\ref{fig:zero_oh}) si può vedere come la
 scelta dei vettori di codifica che predilige i pacchetti importanti
@@ -382,36 +398,80 @@ tutto l'intervallo considerato.
 %
 Il fattore di espansione $EF$ non fornisce miglioramenti significativi
 della PER del MIB, mentre permette di diminuire la PER del LIB per gli
-overhead più alti.
+overhead più alti. Con $EF > 2$, tuttavia, questo effetto tende a
+diventare sempre più piccolo.
 
 Dal grafico delle PER per il caso in cui il canale perde pacchetti in
 modo iid (figura~\ref{fig:iid_oh}) è possible vedere che le curve
 seguono lo stesso andamento del caso precedente. Sono semplicemente
-traslate di una quantità pari al valore della PER del canale.
+traslate al variare della PER del canale di una lunghezza di circa
+$1.6$ volte il valore della PER.
 %
 Infatti, nel caso $e = 10^{-2}$ l'algoritmo testato ha delle
 prestazioni molto vicine a quelle ottenibili sul canale senza errori,
-mentre nei casi con PER $e = 10^{-1}$ ed $e = 2\cdot 10^{-1}$ le curve
-siano traslate, rispettivamente, circa di $0.1$ e $0.2$ rispetto al
+mentre nei casi con PER $e = 10^{-1}$ ed $e = 3\cdot 10^{-1}$ le curve
+siano traslate, rispettivamente, circa di $0.16$ e $0.48$ rispetto al
 caso senza errori.
 
 \subsection{Packet error rate su un canale Markoviano}
 Nel caso del canale Markoviano, descritto nel
 paragrafo~\ref{sec:markov}, sono state eseguite simulazioni per
-valutare la packet error rate variando la lunghezza media $E[\#_B]$
-di una sequenza di slot cattivi consecutivi e considerando diversi
-valori per la dimensione del blocco $K$.
+valutare la packet error rate considerando canali con diverse
+lunghezze medie $E[\#_B]$ di una sequenza di slot cattivi consecutivi
+e variando la dimensione del blocco $K$.
 %
-Come per il paragrafo precedente, qui sono stati usati un canale
-simulato e una sorgente di pacchetti casuali per permettere
-l'esecuzione di test con un gran numero di pacchetti.
-%
+In modo analogo al paragrafo precedente, il canale è stato simulato
+facendo una transizione dello stato del canale ad ogni nuovo pacchetto
+e scartando quest'ultimo in caso lo stato sia ``cattivo''.
+
 La frazione di pacchetti importanti presente in ogni blocco è stata
-mantenuta al 10 \%, come per il caso iid, e anche per gli altri
-parametri ($RF_0$, $RF_1$, $EF$ e $L$) sono stati usati gli stessi
-valori dei test precedenti.
+mantenuta al 5\%, come per il caso iid, e anche per gli altri
+parametri sono stati usati valori simili: $RF_0 = 5$, $RF_1 = 1$,
+$EF=2$, $c=0.1$, $\delta=0.5$. Il numero di pacchetti trasmessi $N$ è
+stato fissato per avere un overhead del 30\%.
+
+Nella figura~\ref{fig:markov_zero} possiamo vedere il caso del canale
+senza errori al variare di $K$.
 %
-Il numero di pacchetti trasmessi $N$ è stato fissato per avere un
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{plot_markov_zero}
+  \caption{Packet error rate a livello applicazione ottenuta al
+    variare della dimensione del blocco sul canale error-free.}
+  \label{fig:markov_zero}
+\end{figure}
+%
+Vediamo che anche nel caso del canale perfetto la probabiltà di errore
+è molto alta in corrisponenza di blocchi piccoli e come, nel caso sia
+applicata la UEP, sia possibile ottenere PER basse per il MIB molto
+prima che nel caso EEP.
+
+Se, invece, consideriamo un canale Markoviano fissando $\EnB = 5$ e
+proviamo due diversi valori per la probabilità media di errore $\pi_B
+\in \{0.01, 0.1\}$, è possibile vedere come gli errori correlati
+influiscano sulla PER.
+%
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{plot_markov_br5}
+  \caption{Packet error rate a livello applicazione ottenuta al
+    variare della dimensione del blocco su tre canali Markoviani.}
+  \label{fig:markov_br5}
+\end{figure}
+%
+La lunghezza di una sequenza cattiva è bassa ed è possible vedere che,
+nel caso di PER media $\pi_B = 0.01$, la dimensione di blocco
+richiesta per far scendere la PER a $10^{-8}$ non aumenta molto
+rispetto al caso error-free. Nel caso la PER del canale sia più alta,
+invece, è possibile notare un drastico peggioramento delle
+prestazioni. Infatti per il caso EEP è necessario arrivare fino a $K
+\approx 7500$ per scendere sotto $10^{-8}$ e per il caso UEP è
+necessario aumentare ancora $K$ fino a $10000$ per ridurre gli errori
+sul MIB fino a $10^{-8}$.
+%
+Per $K = 2000$ si può confrontare la figura~\ref{fig:iid_oh} 
+
+
 overhead del 25 \%, mentre la probabilità stazionaria di errore del
 canale è stata fissata a $\pi_B = 10^{-3}$. Da quest'ultima e da
 $\EnB$ sono state ricavate le probabilità di transizione secondo
