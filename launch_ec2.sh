@@ -11,11 +11,11 @@ elif [ "$#" -eq 2 ]; then
     size=8
     script="${2}"
 elif [ "$#" -eq 1 ]; then
-    ec2type="c4.large"
+    ec2type="c5.large"
     size=8
     script="${1}"
 else
-    ec2type="c4.large"
+    ec2type="c5.large"
     size=8
     script=""
 fi

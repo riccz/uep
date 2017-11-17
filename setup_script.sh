@@ -36,5 +36,8 @@ make -j$(( $(nproc) + 1))
 export MPLBACKEND="PDF"
 echo 'export MPLBACKEND="PDF"' >> ~/.profile
 
+export PYTHONPATH=$HOME/uep/build/lib:$HOME/uep/src:$HOME/uep
+echo 'export PYTHONPATH=$HOME/uep/build/lib:$HOME/uep/src:$HOME/uep' >> ~/.profile
+
 popd
 popd

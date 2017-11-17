@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
-
 import datetime
 import decimal
 import glob
 import lzma
+import math
 import os
 import os.path
 import pickle
@@ -21,8 +20,6 @@ from boto3.dynamodb.conditions import Attr
 from decimal import Decimal
 from subprocess import check_call, check_output, Popen, call
 
-if 'uep/src' not in sys.path:
-    sys.path.append('uep/src')
 from ber import *
 
 PROGRESS = {"BUILD": "FAILED",
@@ -65,7 +62,7 @@ def prepare_video():
 
     # Download if exists
     try:
-        bucket.download_file('dataset.tar.xz', 'uep/dataset.tar.xz')
+        bucket.download_file('dataset_4000.tar.xz', 'uep/dataset.tar.xz')
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == "404":
             exists = False
@@ -112,21 +109,21 @@ def run():
     sim_tab = dynamo.Table('uep_sim_results')
 
     k0 = 100
-    k1 = 900
-    rf0 = 3
+    k1 = 1900
+    rf0 = 5
     rf1 = 1
-    ef = 4
-    pktsize = 512
+    ef = 2
+    pktsize = 388
     send_rate = 1000000
-    stream_name = 'stefan_cif'
+    stream_name = 'stefan_cif_long'
 
-    iid_err_ps = [1e-1, 3e-1]
-    overheads = list(np.linspace(0.4, 0.75, 20)) * 10
+    iid_err_ps = [0.01, 0.1, 0.3]
+    overheads = np.linspace(0, 0.8, 8).tolist()
     print("Run with overheads =\n {!s}\n"
           "and iid_err_ps =\n {!s}".format(overheads, iid_err_ps))
     for (j, p) in enumerate(iid_err_ps):
         for (i, oh) in enumerate(overheads):
-            n = int(1000 * (1 + oh))
+            n = math.ceil((k0+k1) * (1 + oh))
             srv_clog = open("server_console.log", "wt")
             srv_tcp_port = 12312 + i
             srv_proc = Popen(["./server",
@@ -179,12 +176,13 @@ def run():
             bs_dump = pickle.dumps(bs)
             lzout = lzma.compress(bs_dump)
 
-            s3.meta.client.upload_file('server.log.tar.xz',
-                                       'uep.zanol.eu',
-                                       "sim_logs/{:d}_server.log.tar.xz".format(newid))
-            s3.meta.client.upload_file('client.log.tar.xz',
-                                       'uep.zanol.eu',
-                                       "sim_logs/{:d}_client.log.tar.xz".format(newid))
+            # s3.meta.client.upload_file('server.log.tar.xz',
+            #                            'uep.zanol.eu',
+            #                            "sim_logs/{:d}_server.log.tar.xz".format(newid))
+            # s3.meta.client.upload_file('client.log.tar.xz',
+            #                            'uep.zanol.eu',
+            #                            "sim_logs/{:d}_client.log.tar.xz".format(newid
+            # ))
             s3.meta.client.put_object(Body=lzout,
                                       Bucket='uep.zanol.eu',
                                       Key="sim_scans/{:d}_ber_scanner.pickle.xz".format(newid))
