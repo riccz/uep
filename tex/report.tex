@@ -384,7 +384,7 @@ risultati della simulazione di 10000 blocchi.
 %   [4:9]
 %
 % BR5:
-% 
+%
 
 Nel caso senza errori (figura~\ref{fig:zero_oh}) si può vedere come la
 scelta dei vettori di codifica che predilige i pacchetti importanti
@@ -421,8 +421,10 @@ lunghezze medie $E[\#_B]$ di una sequenza di slot cattivi consecutivi
 e variando la dimensione del blocco $K$.
 %
 In modo analogo al paragrafo precedente, il canale è stato simulato
-facendo una transizione dello stato del canale ad ogni nuovo pacchetto
-e scartando quest'ultimo in caso lo stato sia ``cattivo''.
+facendo una transizione di stato prima di ogni nuovo pacchetto e
+scartando quest'ultimo in caso lo stato sia ``cattivo''. Lo stato
+iniziale è stato in modo iid per ogni blocco di pacchetti, secondo le
+probabilità stazionarie $\pi_G$ e $\pi_B$.
 
 La frazione di pacchetti importanti presente in ogni blocco è stata
 mantenuta al 5\%, come per il caso iid, e anche per gli altri
@@ -446,152 +448,60 @@ Vediamo che anche nel caso del canale perfetto la probabiltà di errore
 applicata la UEP, sia possibile ottenere PER basse per il MIB molto
 prima che nel caso EEP.
 
-Se, invece, consideriamo un canale Markoviano fissando $\EnB = 5$ e
-proviamo due diversi valori per la probabilità media di errore $\pi_B
-\in \{0.01, 0.1\}$, è possibile vedere come gli errori correlati
-influiscano sulla PER.
+Se, invece, consideriamo sei diversi canali Markoviano fissando $\EnB
+\in \{5,10,50\}$ e provando due diversi valori per la probabilità
+media di errore $\pi_B \in \{0.01, 0.1\}$, possiamo vedere come gli
+errori correlati influiscano sulla PER.
 %
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.8\textwidth]{plot_markov_br5}
   \caption{Packet error rate a livello applicazione ottenuta al
-    variare della dimensione del blocco su tre canali Markoviani.}
+    variare della dimensione del blocco su due canali Markoviani con
+    $\EnB = 5$ e $\pi_B \in \{0.01, 0.1\}$.}
   \label{fig:markov_br5}
 \end{figure}
 %
-La lunghezza di una sequenza cattiva è bassa ed è possible vedere che,
-nel caso di PER media $\pi_B = 0.01$, la dimensione di blocco
-richiesta per far scendere la PER a $10^{-8}$ non aumenta molto
-rispetto al caso error-free. Nel caso la PER del canale sia più alta,
-invece, è possibile notare un drastico peggioramento delle
-prestazioni. Infatti per il caso EEP è necessario arrivare fino a $K
-\approx 7500$ per scendere sotto $10^{-8}$ e per il caso UEP è
-necessario aumentare ancora $K$ fino a $10000$ per ridurre gli errori
-sul MIB fino a $10^{-8}$.
-%
-Per $K = 2000$ si può confrontare la figura~\ref{fig:iid_oh} 
+Se il canale offre una packet error rate media di $0.01$, possiamo
+notare come il peggioramento delle prestazioni rispetto ai casi
+error-free e iid (figura~\ref{fig:iid_oh}) non sia drastico: la PER
+EEP scende a $10^{-8}$ in corrispondenza di $K \approx 2500, 4000,
+5000$, rispettivamnte, per le tre lunghezze medie del burst; inoltre
+in tutti e tre i casi il MIB ottiene un tasso di errore più basso del
+caso EEP e peggiora altrettanto lentamente. Il LIB risente della
+correlazione tra errori nello stesso modo: le curve scendono più tardi
+a valori comparabili al caso error-free, ma la dimensione di blocco
+necessaria non è molto più alta.
 
-
-overhead del 25 \%, mentre la probabilità stazionaria di errore del
-canale è stata fissata a $\pi_B = 10^{-3}$. Da quest'ultima e da
-$\EnB$ sono state ricavate le probabilità di transizione secondo
-\eqref{eq:mcparams}.
-
-Variando le dimensioni di blocco $K \in [10, 6000]$ e considerando tre
-diversi canali Markoviani, corrispondenti a $E[\#_B] \in \{10, 100,
-500\}$ sono stati ottenuti i risultati mostrati in
-figura~\ref{fig:markov}.
-%
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.8\textwidth]{plot_markov}
-  \caption{Packet error rate a livello applicazione ottenuta al
-    variare della dimensione del blocco su tre canali Markoviani.}
-  \label{fig:markov}
-\end{figure}
-
-Osservando le tre coppie di curve è possibile notare come il loro
-andamento sia pressoché identico per valori di $K$ bassi e come, per
-blocchi di dimensione così piccola, la probabilità di errore sia molto
-superiore a quella del canale.
-%
-Questo è dovuto alle scarse prestazioni in termini di probabilità di
-decodifica dei codici LT quando sono usati per codificare blocchi
-troppo piccoli.
-%
-Infatti è possibile vedere in figura~\ref{fig:noerrk} la probabilità di
-decodifica al variare della dimensione del blocco su un canale senza
-errori, usando gli stessi parametri dei tre casi Markoviani.
-%
-\begin{figure}[htb]
-  \centering
-  %\includegraphics[width=0.8\textwidth]{plot_noerr_k}
-  \caption{Packet error rate a livello di applicazione al variare
-    della dimensione del blocco su un canale senza errori. I parametri
-    usati sono gli stessi di figura~\ref{fig:markov}.}
-  \label{fig:noerrk}
-\end{figure}
-
-Quando la dimensione del blocco diventa grande abbastanza ($K \approx
-1500$), invece, si può notare un diverso comportamento a seconda della
-correlazione degli errori del canale.
-%
-Nel caso $\EnB = 500$ entrambe le packet error rate del MIB e del LIB
-rimangono intorno a $10^{-3}$ su tutto l'intervallo di $K$
-considerato. Nel caso $\EnB = 100$ è possibile vedere che il MIB e il
-LIB subiscono delle packet error rate diverse e tendono a
-decrescere. Infine, anche nel caso $\EnB = 10$ è visibile la diversa
-PER per il MIB e il LIB, ma adesso entrambi hanno un salto in
-corrispondenza di $K \approx 2300$ e poi decrescono più lentamente del
-caso $\EnB = 100$.
+Per il caso con $\pi_B = 0.1$, invece, vediamo come la discesa della
+PER sia molto più lenta. Per $K = 2000$ possiamo confrontare il
+grafico con il caso iid e vedere come il peggioramento sia visibile ma
+non di grande entità. Rispetto al caso con $\pi_B = 0.01$, tuttavia,
+le PER del case UEP scendono molto lentamente: il LIB non riesce a
+scendere sotto $10^{-3}$ nell'intervallo di $K$ considerato anche per
+il burst più corto, e il MIB richiede blocchi molto più grandi per
+scendere sotto $10^{-8}$. In questo caso le prestazioni della codifica
+EEP, anche se inizialmente sono peggiori del LIB, scendono più
+velocemente del MIB e permettono di ottenere una PER sotto $10^{-8}$
+con blocchi più corti di quelli richiesti per il MIB.
 
 Da tutto ciò possiamo vedere come, nel caso di errori correlati,
-l'effetto della protezione non uniforme sia quasi inesistente per
-valori di $K$ piccoli, infatti sia MIB che LIB subiscono la stessa
-probabilità di errore. Al crescere di $K$, invece, è possibile
-applicare la protezione non uniforme.
+l'effetto della protezione non uniforme sia tanto più forte quanto
+mggiore è la dimensione $K$ del blocco.
+%% Il contrario, invece, accade nel caso error-free dove, al crescere
+%% della dimensione del blocco, le probabilità di errore su MIB e LIB
+%% tendono ad avvicinarsi \cite{uep}.
+
+Si vede anche come la codifica riesca a correggere bene i burst di
+errori quando la probabilità media di errore del canale non è molto
+alta, infatti la PER raggiunge velocemente valori simili al caso IID e
+offre una protezione dagli errori per il MIB migliore del caso EEP.
 %
-Questo effetto è l'opposto di quanto accade nel caso IID \cite{uep}
-dove, al crescere della dimensione del blocco, le probabilità di
-errore su MIB e LIB tendono ad avvicinarsi.
-
-Si vede anche come la correlazione tra gli errori provochi un notevole
-peggioramento delle prestazioni rispetto al caso IID: anche con il
-valore più piccolo per la lunghezza media di una sequenza di slot
-cattivi ($\EnB = 10$) è necessario un blocco di $K\approx 2300$ per
-ottenere una PER a livello applicazione simile a quanto è possibile
-ottenere nel caso IID con $e=10^{-3}$ per $K=1000$, usando lo stesso
-overhead (25\%).
-
-Visto l'alto valore della PER per canali con alto numero di errori correlati,
-sono stati simulati altri 2 canali con $\pi_B \in\{10^{-3}, 10^{-2}, 10^{-1}\}$
-mantenendo fisso $\EnB=10$.\\
-\begin{figure}[H]
-    \centering
-        %\makebox[\textwidth][c]{\includegraphics[width=0.8\textwidth]{local_markov_plot_.png}}
-    \caption{Packet error rate a livello di applicazione al variare
-    della PER, con $\EnB = 10$. I parametri
-    usati sono gli stessi di figura~\ref{fig:markov}.}
-  \label{fig:enbfixed}
-\end{figure}
-Il numero medio di slot buoni consecutivi, nei 3 casi, è $E[\#_G]\in\{9990,990,90\}$.\\
-Dal grafico si nota che l'effetto della protezione non uniforme, calcolato come il rapporto
-tra la PER della parte meno importante e la PER della parte più importante, è maggiore
-quando la probabilità d'errore stazionaria ($\pi_B$) aumenta.
-
-\subsection{Scelta della dimensione dei pacchetti}
-\label{sec:pktsize}
-Il paper \cite{uep} considera simboli di 1 byte durante la codifica,
-ma questa scelta non è praticabile nel caso di questa tesina. Il
-motivo è dato dall'overhead introdotto aggiungendo degli header a ogni
-pacchetto, infatti una dimensione di pacchetto $L=1$ comporterebbe un
-overhead del 1500 \% dovuto solo agli header.
-
-Questo overhead decresce all'aumentare della dimensione dei pacchetti
-$L$, tuttavia bisogna considerare l'overhead introdotto dalla
-segmentazione del video H264.
-%
-Il video H264 è composto da pacchetti (detti NALU) di dimensioni
-variabili che devono essere aggregati o segmentati in pacchetti di
-dimensione fissa $L$. Il fatto di considerare due diverse classi di
-priorità per le NALU richiede di inserire un certo numero di byte di
-padding, ogni volta che termina una sequenza consecutiva di NALU con
-la stessa priorità, per ottenere un numero intero di pacchetti di
-lunghezza $L$.
-
-Tenendo conto di entrambi questi contributi all'overhead si ottiene il
-grafico mostrato in figura~\ref{fig:pktsize} ed è possibile
-individuare il valore $L = 388$ che minimizza l'overhead dovuto al
-padding e agli header.
-% Best packet size = 388
-% Min overhead = 0.069367
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.8\textwidth]{plot_overhead}
-  \caption{Overhead introdotto dalla segmentazione al variare della
-    dimensione $L$ dei pacchetti.}
-  \label{fig:pktsize}
-\end{figure}
+Se la PER del canale è alta rispetto all'overhead introdotto dalla
+codifica, invece, le prestazioni sono drasticamente peggiori ed è
+necessaria una dimensione di blocco molto alta per ottenere PER basse
+sul MIB. In questo caso la codifica EEP diventa preferibile dopo una
+certa dimensione del blocco.
 
 \subsection{Tempi di codifica e decodifica}
 Per verificare quanto tempo è necessario alla codifica e alla
@@ -655,6 +565,40 @@ decodifica corrisponenti. Questo può essere spiegato dal fatto che,
 mentre l'implementazione del message passing usata nelle simulazioni è
 scritta in C++, la generazione dei vettori di codifica è effettuata da
 uno script scritto in Python.
+
+\subsection{Scelta della dimensione dei pacchetti}
+\label{sec:pktsize}
+Il paper \cite{uep} considera simboli di 1 byte durante la codifica,
+ma questa scelta non è praticabile nel caso di questa tesina. Il
+motivo è dato dall'overhead introdotto aggiungendo degli header a ogni
+pacchetto, infatti una dimensione di pacchetto $L=1$ comporterebbe un
+overhead del 1500 \% dovuto solo agli header.
+
+Questo overhead decresce all'aumentare della dimensione dei pacchetti
+$L$, tuttavia bisogna considerare l'overhead introdotto dalla
+segmentazione del video H264.
+%
+Il video H264 è composto da pacchetti (detti NALU) di dimensioni
+variabili che devono essere aggregati o segmentati in pacchetti di
+dimensione fissa $L$. Il fatto di considerare due diverse classi di
+priorità per le NALU richiede di inserire un certo numero di byte di
+padding, ogni volta che termina una sequenza consecutiva di NALU con
+la stessa priorità, per ottenere un numero intero di pacchetti di
+lunghezza $L$.
+
+Tenendo conto di entrambi questi contributi all'overhead si ottiene il
+grafico mostrato in figura~\ref{fig:pktsize} ed è possibile
+individuare il valore $L = 388$ che minimizza l'overhead dovuto al
+padding e agli header.
+% Best packet size = 388
+% Min overhead = 0.069367
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{plot_overhead}
+  \caption{Overhead introdotto dalla segmentazione al variare della
+    dimensione $L$ dei pacchetti.}
+  \label{fig:pktsize}
+\end{figure}
 
 \newpage
 \section{Conclusioni} % Max 0.5 pages
