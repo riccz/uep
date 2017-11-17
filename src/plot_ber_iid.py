@@ -34,7 +34,7 @@ if __name__ == "__main__":
     dyn = boto3.resource('dynamodb', region_name='us-east-1')
     sim_tab = dyn.Table('uep_sim_results')
 
-    wanted_pers = [0, 1e-2, 1e-1, 3e-1]
+    wanted_pers = [0.01, 0.1, 0.3]
     # Get all the iid points with given params, partition by iid_per
     udp_err_rates = []
     points = []
@@ -43,10 +43,10 @@ if __name__ == "__main__":
         q = sim_tab.query(IndexName='iid_per-overhead-index',
                           KeyConditionExpression=Key('iid_per').eq(dec_wp),
                           FilterExpression=Attr('k0').eq(100) &
-                          Attr('k1').eq(900) &
-                          Attr('rf0').eq(3) &
+                          Attr('k1').eq(1900) &
+                          Attr('rf0').eq(5) &
                           Attr('rf1').eq(1) &
-                          Attr('ef').eq(4))# &
+                          Attr('ef').eq(2))# &
                           #Attr('stream_name').eq('stefan_cif_long'))# &
                           #Attr('masked').ne(True))
         for p in q['Items']:
