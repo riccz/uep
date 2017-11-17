@@ -19,7 +19,7 @@ done
 
 # Cases 3,4,5: vary EnB and pi_B
 piB=(10 100) # ! 1/pi_B !
-EnB=(5 10 50)
+EnB=(5 50 500)
 rfs=(1 5)
 ef=1
 echo "Running correlated"
