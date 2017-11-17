@@ -55,8 +55,8 @@ class ber_scanner:
         self.server_scanner.add_regex("data_server::handle_sent.*udp_pkt_sent",
                                       self.last_block_sent_h)
         self.last_block_recvd = None
-        self.client_scanner.add_regex("mp_context::run.*"
-                                 "output_size=(\d+)",
+        self.client_scanner.add_regex("block_decoder::run_message_passing.*"
+                                 "received_pkts=(\d+)",
                                  self.last_block_recvd_h)
 
     def scan(self):

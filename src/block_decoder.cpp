@@ -149,10 +149,10 @@ void block_decoder::run_message_passing() {
   avg_setup.add_sample(mp_tdiff.count());
   avg_mp.add_sample(mp_ctx.run_duration());
 
-  // BOOST_LOG(perf_lg) << "block_decoder::run_message_passing decoded_pkts="
-  //		     << mp_ctx.decoded_count()
-  //		     << " received_pkts="
-  //		     << received_pkts.size();
+  BOOST_LOG(perf_lg) << "block_decoder::run_message_passing decoded_pkts="
+		     << mp_ctx.decoded_count()
+		     << " received_pkts="
+		     << mp_ctx.output_size();
 }
 
 const base_row_generator &block_decoder::row_generator() const {
