@@ -62,7 +62,9 @@ class AverageCounter:
         return self.__sum_w
 
 def update_average(m, sumw, s, w):
-    return AverageCounter(m, sumw).add(s, w).avg
+    c = AverageCounter(m, sumw)
+    c.add(s, w)
+    return c.avg
 
 def mean(numbers):
     return float(sum(numbers)) / max(len(numbers), 1)
