@@ -168,8 +168,8 @@ def run():
             bs = ber_scanner("server.log", "client.log")
             bs.scan()
 
-            for logfile in ["server.log", "client.log"]:
-                check_call(["tar", "-cJf", logfile + ".tar.xz", logfile])
+            # for logfile in ["server.log", "client.log"]:
+            #     check_call(["tar", "-cJf", logfile + ".tar.xz", logfile])
 
             newid = random.getrandbits(64)
             ts = datetime.datetime.now().timestamp()
@@ -190,8 +190,8 @@ def run():
             sim_tab.put_item(Item={'result_id': newid,
                                    'timestamp': Decimal(ts).quantize(Decimal('1e-3')),
                                    'git_commit': git_sha1,
-                                   's3_server_log': "sim_logs/{:d}_server.log.tar.xz".format(newid),
-                                   's3_client_log': "sim_logs/{:d}_client.log.tar.xz".format(newid),
+                                   #'s3_server_log': "sim_logs/{:d}_server.log.tar.xz".format(newid),
+                                   #'s3_client_log': "sim_logs/{:d}_client.log.tar.xz".format(newid),
                                    's3_ber_scanner': "sim_scans/{:d}_ber_scanner.pickle.xz".format(newid),
                                    'iid_per': Decimal(p).quantize(Decimal('1e-8')),
                                    'overhead': Decimal(oh).quantize(Decimal('1e-4')),
@@ -206,8 +206,8 @@ def run():
                                    'stream_name': stream_name},
                              ConditionExpression=Attr('result_id').not_exists())
 
-            for logfile in ["server.log", "client.log"]:
-               os.remove(logfile + ".tar.xz")
+            # for logfile in ["server.log", "client.log"]:
+            #    os.remove(logfile + ".tar.xz")
 
     os.chdir("../..")
     PROGRESS['RUN'] = "OK"

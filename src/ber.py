@@ -7,6 +7,7 @@ import numpy as np
 import sys
 
 from utils.logs import *
+from utils.stats import *
 
 class ber_scanner:
     def sent_pkts_h(self, m):
