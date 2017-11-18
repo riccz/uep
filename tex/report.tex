@@ -425,7 +425,7 @@ e variando la dimensione del blocco $K$.
 In modo analogo al paragrafo precedente, il canale è stato simulato
 facendo una transizione di stato prima di ogni nuovo pacchetto e
 scartando quest'ultimo in caso lo stato sia ``cattivo''. Lo stato
-iniziale è stato in modo iid per ogni blocco di pacchetti, secondo le
+iniziale è scelto in modo iid per ogni blocco di pacchetti, secondo le
 probabilità stazionarie $\pi_G$ e $\pi_B$.
 
 La frazione di pacchetti importanti presente in ogni blocco è stata
@@ -435,7 +435,8 @@ $EF=2$, $c=0.1$, $\delta=0.5$. Il numero di pacchetti trasmessi $N$ è
 stato fissato per avere un overhead del 30\%.
 
 Nella figura~\ref{fig:markov_zero} possiamo vedere il caso del canale
-senza errori al variare di $K$.
+senza errori al variare di $K$, dato che la PER varia con $K$ anche
+senza cambiare il canale.
 %
 \begin{figure}[htb]
   \centering
@@ -445,23 +446,23 @@ senza errori al variare di $K$.
   \label{fig:markov_zero}
 \end{figure}
 %
-Vediamo che anche nel caso del canale perfetto la probabiltà di errore
-è molto alta in corrisponenza di blocchi piccoli e come, nel caso sia
-applicata la UEP, sia possibile ottenere PER basse per il MIB molto
-prima che nel caso EEP.
+Infatti anche nel caso del canale perfetto la probabiltà di errore è
+molto alta in corrisponenza di blocchi piccoli e si può vedere come,
+nel caso sia applicata la UEP, sia possibile ottenere PER basse per il
+MIB molto prima che nel caso EEP.
 
-Se, invece, consideriamo sei diversi canali Markoviano fissando $\EnB
-\in \{5,10,50\}$ e provando due diversi valori per la probabilità
+Se, invece, consideriamo sei diversi canali Markoviani fissando $\EnB
+\in \{5,50,500\}$ e provando due diversi valori per la probabilità
 media di errore $\pi_B \in \{0.01, 0.1\}$, possiamo vedere come gli
 errori correlati influiscano sulla PER.
 %
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.8\textwidth]{plot_markov_br5}
+  \includegraphics[width=0.8\textwidth]{plot_markov_pi100}
   \caption{Packet error rate a livello applicazione ottenuta al
-    variare della dimensione del blocco su due canali Markoviani con
-    $\EnB = 5$ e $\pi_B \in \{0.01, 0.1\}$.}
-  \label{fig:markov_br5}
+    variare della dimensione del blocco su canali Markoviani con $\EnB
+    \in \{5,50,500\}$ e $\pi_B = 0.01$.}
+  \label{fig:markov_pi100}
 \end{figure}
 %
 Se il canale offre una packet error rate media di $0.01$, possiamo
@@ -474,6 +475,16 @@ caso EEP e peggiora altrettanto lentamente. Il LIB risente della
 correlazione tra errori nello stesso modo: le curve scendono più tardi
 a valori comparabili al caso error-free, ma la dimensione di blocco
 necessaria non è molto più alta.
+
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{plot_markov_pi10}
+  \caption{Packet error rate a livello applicazione ottenuta al
+    variare della dimensione del blocco su canali Markoviani con $\EnB
+    \in \{5,50,500\}$ e $\pi_B = 0.1$.}
+  \label{fig:markov_pi10}
+\end{figure}
 
 Per il caso con $\pi_B = 0.1$, invece, vediamo come la discesa della
 PER sia molto più lenta. Per $K = 2000$ possiamo confrontare il
@@ -612,6 +623,9 @@ figura~\ref{fig:pktsize} ed è possibile individuare il valore $L =
 pacchetti in UDP.
 % Best packet size = 388
 % Min overhead = 0.069367
+% With UDP+IP:
+% Best packet size = 671
+% Min overhead = 0.123669
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{plot_overhead}
