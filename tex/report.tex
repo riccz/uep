@@ -505,19 +505,22 @@ certa dimensione del blocco.
 
 \subsection{Tempi di codifica e decodifica}
 Per verificare quanto tempo è necessario alla codifica e alla
-decodifica di un blocco di pacchetti al variare dei parametri è stata
-simulata la trasmissione di 500 blocchi al variare dell'overhead,
-utilizzando lo stesso procedimento dei paragrafi precendenti.
+decodifica di un blocco di pacchetti al variare della grandezza del
+blocco virtuale, è stata simulata la trasmissione di 5000 blocchi al
+variare dell'overhead, utilizzando lo stesso procedimento dei
+paragrafi precendenti.
 
 Sono stati simulati sia il caso di equal error protection che quello
 di unequal error protection, usando diversi valori per il fattore di
-espansione $EF \in \{ 1,2,4 \}$. Gli altri parametri sono gli stessi
-dei paragrafi precedenti: $K = 2000$, $K_0 = K \cdot 0.05$, $c=0.1$,
-$\delta=0.5$ e per il caso UEP $RF_0 = 5$.
+espansione $EF \in \{ 1,2,4,8,16 \}$.
+%
+Gli altri parametri sono gli stessi dei paragrafi precedenti: $K =
+2000$, $K_0 = K \cdot 0.05$, $c=0.1$, $\delta=0.5$ e per il caso UEP
+$RF_0 = 5$.
 
 In figura~\ref{fig:encdec} sono mostrati i tempi medi di codifica e di
-decodifica ottenuti eseguendo le simulazioni su una CPU Intel Xeon
-E5450 con 16 GB di RAM.
+decodifica ottenuti eseguendo le simulazioni su un computer con CPU
+Intel Xeon E5450 e con 16 GB di RAM.
 %
 \begin{figure}[htb]
   \centering
@@ -547,24 +550,34 @@ E5450 con 16 GB di RAM.
   \end{subfigure}
   \caption{Tempi medi di codifica e decodifica per un blocco di
     $K=2000$ pacchetti codificato usando EEP o UEP ($K_0 = 100$,
-    $RF_0=5$) con $EF \in \{1,2,4\}$.}
+    $RF_0=5$) con $EF \in \{1,2,4,8,16\}$.}
   \label{fig:encdec}
 \end{figure}
 %
-Si può vedere che l'andamento è coerente con \cite{uep}: i tempi di
-codifica aumentano linearmente al crescere del'overhead e
-sub-linearmente al crescere di $EF$; i tempi di decodifica crescono
-velocemente fino al livello di overhead in cui la maggior parte dei
-pacchetti sono decodificati e, in seguito, la crescita diventa molto
-più lenta.
+Si può vedere che l'andamento è coerente con \cite{uep}: entrambi i
+tempi di codifica aumentano linearmente al crescere del'overhead e
+sub-linearmente al crescere del fattore di espansione; i tempi di
+decodifica crescono velocemente, in entrambi i casi, fino a un livello
+di overhead in cui quasi tutti i pacchetti sono decodificabili e, in
+seguito, la crescita diventa lineare e molto più lenta.
 %
-I valori dei tempi di decodifica sono dello stesso ordine di grandezza
-di quelli riportati in \cite{uep}, mentre i valori dei tempi di
-codifica sono molto più alti, sia dell'articolo che dei tempi di
-decodifica corrisponenti. Questo può essere spiegato dal fatto che,
-mentre l'implementazione del message passing usata nelle simulazioni è
-scritta in C++, la generazione dei vettori di codifica è effettuata da
-uno script scritto in Python.
+Confrontando le figure~\ref{fig:dectime_eep} e~\ref{fig:dectime_uep}
+si vede che, per overhead bassi, l'uso dell'UEP aumenta molto i tempi
+di decodifica, ma tende ad assestarsi su valori simili al caso EEP una
+volta raggiunto un overhead tale da decodificare quasi tutti i
+pacchetti.
+
+I valori dei tempi di decodifica trovati in questa tesina sono dello
+stesso ordine di grandezza di quelli riportati in \cite{uep}, invece i
+tempi di codifica (figure~\ref{fig:enctime_eep}
+e~\ref{fig:enctime_uep}) sono molto più alti, sia confrontandoli con i
+grafici dell'articolo che coi tempi per la decodifica sullo stesso
+computer.
+%
+Questo può essere spiegato dal fatto che, mentre l'implementazione del
+message passing usata nelle simulazioni è scritta in C++, la
+generazione dei vettori di codifica è effettuata da uno script più
+lento scritto in Python.
 
 \subsection{Scelta della dimensione dei pacchetti}
 \label{sec:pktsize}
