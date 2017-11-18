@@ -57,8 +57,8 @@ if __name__ == "__main__":
     assert(callable(param_filter))
 
     p = plots()
-    p.automaticXScale = True
-    p.automaticYScale = True
+    p.automaticXScale = [0, 0.8]
+
     p.add_plot(plot_name='enc_time',xlabel='Overhead',
                ylabel='Encoding time [ms]',logy=False)
     p.add_plot(plot_name='dec_time',xlabel='Overhead',
@@ -104,18 +104,20 @@ if __name__ == "__main__":
 
         if not param_filter(*params): continue
 
-        legend_str = ("Ks={!s},"
-                      "RFs={!s},"
-                      "EF={:d},"
-                      "c={:.2f},"
-                      "delta={:.2f}").format(*params)
+        # legend_str = ("Ks={!s},"
+        #               "RFs={!s},"
+        #               "EF={:d},"
+        #               "c={:.2f},"
+        #               "delta={:.2f}").format(*params)
+        legend_str = "EF = {:d}".format(EF)
 
+        p.automaticYScale = [50, 130]
         p.add_data(plot_name='enc_time',label=legend_str,
                            x=overheads, y=avg_enc_times)
-        plt.grid()
+
+        p.automaticYScale = [0, 8]
         p.add_data(plot_name='dec_time',label=legend_str,
                            x=overheads, y=avg_dec_times)
-        plt.grid()
 
         p.add_data(plot_name='nblocks',label=legend_str,
                    x=overheads, y=nblocks)
