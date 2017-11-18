@@ -143,7 +143,9 @@ if __name__ == "__main__":
 
         k_blocks = sorted(set(k for d in data_same_pars for k in d['k_blocks']))
 
-        if not args.merge:
+        if (not args.merge and
+            not (math.isclose(avg_per, 0) and
+                 math.isclose(avg_bad_run, 1))):
             k_blocks = sorted(set(k_blocks).intersection(
                 np.linspace(100, 15100, 16, dtype=int).tolist()# +
                 # np.linspace(100, 2100, 11, dtype=int)[:-1:2].tolist()
