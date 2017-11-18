@@ -114,7 +114,10 @@ if __name__ == "__main__":
 
         overheads = sorted(set(o for d in data_same_pars for o in d['overheads']))
 
-        # overheads = sorted(set(overheads).intersection(np.linspace(0, 0.4, 16)))
+        # if not args.merge:
+        #     overheads = sorted(set(overheads).intersection(
+        #         np.linspace(0, 0.4, 16)
+        #     ))
 
         avg_pers = np.zeros((len(overheads), len(Ks)))
         nblocks = np.zeros(len(overheads), dtype=int)

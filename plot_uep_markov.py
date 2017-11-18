@@ -143,6 +143,12 @@ if __name__ == "__main__":
 
         k_blocks = sorted(set(k for d in data_same_pars for k in d['k_blocks']))
 
+        if not args.merge:
+            k_blocks = sorted(set(k_blocks).intersection(
+                np.linspace(100, 15100, 16, dtype=int).tolist()# +
+                # np.linspace(100, 2100, 11, dtype=int)[:-1:2].tolist()
+            ))
+
         avg_pers = np.zeros((len(k_blocks), len(Ks_frac)))
         nblocks = np.zeros(len(k_blocks), dtype=int)
         avg_drop_rates = np.zeros(len(k_blocks))
