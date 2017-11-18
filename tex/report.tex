@@ -297,6 +297,7 @@ Il messaggio che si ottiene da tali giustapposizioni è mappato nelle parti orig
 \subsection{Complicazioni trovate} % Max 5 lines
 
 \section{Risultati} % Min 7 pages
+\label{sec:results}
 L'algoritmo per la protezione non uniforme esposto nel
 paragrafo~\ref{UEPsection} è stato testato nei due casi di canale
 senza memoria e di canale Markoviano per determinare la packet error
@@ -314,6 +315,7 @@ utilizzando solamente l'implementazione del message passing, senza
 trasmettere realmente dei pacchetti.
 
 \subsection{Packet error rate su un canale senza memoria}
+\label{sec:iid}
 In questo caso è stata misurata la packet error rate a livello di
 applicazione ottenuta variando l'overhead e considerando diversi
 valori per la packet error rate del canale.
@@ -582,36 +584,75 @@ lento scritto in Python.
 \subsection{Scelta della dimensione dei pacchetti}
 \label{sec:pktsize}
 Il paper \cite{uep} considera simboli di 1 byte durante la codifica,
-ma questa scelta non è praticabile nel caso di questa tesina. Il
-motivo è dato dall'overhead introdotto aggiungendo degli header a ogni
-pacchetto, infatti una dimensione di pacchetto $L=1$ comporterebbe un
-overhead del 1500 \% dovuto solo agli header.
+ma questa scelta non è praticabile nel caso si vogliano effettivamente
+trasmettere dei pacchetti codificati.
+%
+Il motivo è dato dall'overhead introdotto aggiungendo degli header di
+dimensione fissa di 15 byte a ogni pacchetto, infatti avere pacchetti
+di lunghezza $L=1$ comporterebbe un overhead del 1500 \% dovuto solo
+agli header.
 
 Questo overhead decresce all'aumentare della dimensione dei pacchetti
-$L$, tuttavia bisogna considerare l'overhead introdotto dalla
-segmentazione del video H264.
+$L$, tuttavia bisogna considerare anche l'overhead introdotto dalla
+segmentazione del video H264, che non sarebbe presente nel caso $L=1$.
 %
-Il video H264 è composto da pacchetti (detti NALU) di dimensioni
-variabili che devono essere aggregati o segmentati in pacchetti di
-dimensione fissa $L$. Il fatto di considerare due diverse classi di
-priorità per le NALU richiede di inserire un certo numero di byte di
-padding, ogni volta che termina una sequenza consecutiva di NALU con
-la stessa priorità, per ottenere un numero intero di pacchetti di
-lunghezza $L$.
+%% Il video H264 è composto da pacchetti (detti NALU) di dimensioni
+%% variabili che devono essere aggregati o segmentati in pacchetti di
+%% dimensione fissa $L$.
+%
+Il fatto di considerare due diverse classi di priorità per le NALU
+richiede di inserire un certo numero di byte di padding ogni volta che
+termina una sequenza consecutiva di NALU con la stessa priorità, per
+ottenere un numero intero di pacchetti di lunghezza $L$.
 
-Tenendo conto di entrambi questi contributi all'overhead si ottiene il
-grafico mostrato in figura~\ref{fig:pktsize} ed è possibile
-individuare il valore $L = 388$ che minimizza l'overhead dovuto al
-padding e agli header.
+Tenendo conto di entrambi questi contributi all'overhead per il video
+usato in \cite{uep}, si ottiene il grafico mostrato in
+figura~\ref{fig:pktsize} ed è possibile individuare il valore $L =
+388$ che minimizza l'overhead introdotto prima di incapsulare i
+pacchetti in UDP.
 % Best packet size = 388
 % Min overhead = 0.069367
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{plot_overhead}
-  \caption{Overhead introdotto dalla segmentazione al variare della
+  \caption{Overhead introdotto prima del livello UDP, al variare della
     dimensione $L$ dei pacchetti.}
   \label{fig:pktsize}
 \end{figure}
+
+\subsection{Simulazione del sistema completo}
+Come scritto all'inizio della sezione~\ref{sec:results}, l'esecuzione
+del sistema completo è molto onerosa in termini di tempo, quindi in
+questa tesina è stato preferito fornire dei grafici più precisi
+simulando solamente il message passing.
+%
+L'esecuzione del sistema completo comunque fornisce risultati coerenti
+con le simulazioni dei paragrafi precedenti, come è possibile vedere
+in figura~\ref{fig:iid_real}.
+%
+Ripetendo lo stesso video usato in \cite{uep} fino a ottenere 4050
+frame, usando pacchetti della dimensione ottimale trovata nel
+paragrafo~\ref{sec:pktsize} e gli stessi parametri del
+paragrafo~\ref{sec:iid} sono state ottenute le PER mostrate nella
+figura~\ref{fig:iid_real}.
+%
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{plot_iid_real}
+  \caption{Packet error rate ottenuta dal sistema completo al variare
+    dell'overhead.}
+  \label{fig:iid_real}
+\end{figure}
+%
+Il canale è stato simualato scartando pacchetti UDP al client con una
+data probabilità $e$, in modo simile alle simulazioni precedenti,
+avendo sia il client che il server in esecuzione sullo stesso
+computer.
+%
+Per permettere un confronto con i risultati delle simulazioni, è stato
+tenuto conto solo dell'overhead introdotto dalla codifica dei
+pacchetti segmentati, ignorando il contributo del padding e degli
+header.
 
 \newpage
 \section{Conclusioni} % Max 0.5 pages
