@@ -69,8 +69,12 @@ if __name__ == "__main__":
 
     Ks_frac = [0.05, 0.95]
     k_blocks = np.linspace(100, 15100, 16, dtype=int).tolist()
-    k_blocks += np.linspace(100, 2100, 11, dtype=int)[:-1].tolist()
-    k_blocks = sorted(set(k_blocks))
+
+    if (math.isclose(avg_per, 0) and
+        math.isclose(avg_bad_run, 1)):
+        k_blocks += np.linspace(100, 2100, 11, dtype=int)[:-1].tolist()
+        k_blocks += np.linspace(2100, 3100, 6, dtype=int)[:-1].tolist()
+        k_blocks = sorted(set(k_blocks))
 
     k_blocks = list(filter(lambda k: (k >= args.k_min and
                                       k <= args.k_max),
