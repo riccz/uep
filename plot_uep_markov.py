@@ -211,14 +211,15 @@ if __name__ == "__main__":
                 new_pers[i] = avg_p
             avg_pers = new_pers
 
-        legend_str = ("RFs={!s},"
-                      "EF={:d},"
-                      "c={:.2f},"
-                      "delta={:.2f},"
-                      "oh={:.2f},"
-                      "avg_per={:.0e},"
-                      "avg_bad_run={:.2f},"
-                      "Ks_frac={!s}").format(*params)
+        # legend_str = ("RFs={!s},"
+        #               "EF={:d},"
+        #               "c={:.2f},"
+        #               "delta={:.2f},"
+        #               "oh={:.2f},"
+        #               "avg_per={:.0e},"
+        #               "avg_bad_run={:.2f},"
+        #               "Ks_frac={!s}").format(*params)
+        legend_str = "E[#B] = {:.0f}".format(avg_bad_run)
 
         typestr = 'mib'
         if all(rf == 1 for rf in RFs) or len(Ks_frac) == 1:
