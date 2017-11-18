@@ -138,20 +138,24 @@ if __name__ == "__main__":
             lib_per_ci.append(success_err(z, n))
         lib_per_ci = np.array(lib_per_ci)
 
-        plt.plot(ohs,
-                 mib_per,
-                 marker='o',
-                 linewidth=1.5,
-                 label="MIB e = {:.0e}".format(per))
+        mibline = plt.plot(ohs,
+                           mib_per,
+                           marker='.',
+                           linewidth=0.5,
+                           linestyle='-',
+                           label="MIB e = {:.0e}".format(per))[0]
         plt.plot(ohs,
                  lib_per,
-                 marker='o',
-                 linewidth=1.5,
+                 color=mibline.get_color(),
+                 marker='.',
+                 linewidth=0.5,
+                 linestyle='--',
                  label="LIB e = {:.0e}".format(per))
 
-    plt.ylim(1e-8, 1)
+    plt.ylim(1e-3, 1)
+    plt.xlim(0, 0.8 * (1.01))
     plt.xlabel('Overhead')
-    plt.ylabel('UEP PER')
+    plt.ylabel('PER')
     plt.legend()
     plt.grid()
 
