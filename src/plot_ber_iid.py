@@ -46,9 +46,9 @@ if __name__ == "__main__":
                           Attr('k1').eq(1900) &
                           Attr('rf0').eq(5) &
                           Attr('rf1').eq(1) &
-                          Attr('ef').eq(2))# &
-                          #Attr('stream_name').eq('stefan_cif_long'))# &
-                          #Attr('masked').ne(True))
+                          Attr('ef').eq(2) &
+                          Attr('stream_name').eq('stefan_cif_long') &
+                          Attr('masked').ne(True))
         for p in q['Items']:
             per = p['iid_per']
             if per not in udp_err_rates:
@@ -72,10 +72,16 @@ if __name__ == "__main__":
         for p in points[j]:
             bs_o = uep_bucket.Object(p['s3_ber_scanner']).get()
             bs = pickle.loads(lzma.decompress(bs_o['Body'].read()))
+
             print("[{!s}] iid_per = {:f}, overhead = {:f}"
                   " results:".format(p['result_id'],
                                      p['iid_per'],
                                      p['overhead']))
+
+            # if (p['iid_per'] == Decimal('0.01') and
+            #     p['overhead'] == Decimal('0.1143')):
+            #     print("^^^ SKIP THIS ^^^")
+            #     continue
 
             errs = list(map(operator.sub,
                             bs.tot_sent,
