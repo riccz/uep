@@ -134,7 +134,7 @@ if __name__ == "__main__":
     assert(callable(param_filter))
 
     p = plots()
-    if args.param_filter == 'error_free':
+    if args.param_filter in ['error_free', 'pi100small']:
         p.automaticXScale = [0, 6000]
     else:
         p.automaticXScale = True
@@ -171,13 +171,20 @@ if __name__ == "__main__":
         k_blocks = sorted(set(k for d in data_same_pars for k in d['k_blocks']))
 
         if (not args.merge and
-            not (math.isclose(avg_per, 0) and
-                 math.isclose(avg_bad_run, 1))):
+            ((math.isclose(avg_per, 0) and
+              math.isclose(avg_bad_run, 1)) or
+             args.param_filter == 'pi100small')):
+            k_blocks = sorted(set(k_blocks).intersection(
+                np.linspace(100, 15100, 16, dtype=int).tolist() +
+                np.linspace(100, 2100, 11, dtype=int)[:-1].tolist()
+            ))
+        elif (not args.merge and
+              not (math.isclose(avg_per, 0) and
+                   math.isclose(avg_bad_run, 1))):
             k_blocks = sorted(set(k_blocks).intersection(
                 np.linspace(100, 15100, 16, dtype=int).tolist()# +
-                # np.linspace(100, 2100, 11, dtype=int)[:-1:2].tolist()
             ))
-
+        
         avg_pers = np.zeros((len(k_blocks), len(Ks_frac)))
         nblocks = np.zeros(len(k_blocks), dtype=int)
         avg_drop_rates = np.zeros(len(k_blocks))
