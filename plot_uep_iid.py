@@ -181,12 +181,16 @@ if __name__ == "__main__":
                 new_pers[i] = avg_p
             avg_pers = new_pers
 
-        legend_str = ("Ks={!s},"
-                      "RFs={!s},"
-                      "EF={:d},"
-                      "c={:.2f},"
-                      "delta={:.2f},"
-                      "e={:.0e}").format(*params)
+        # legend_str = ("Ks={!s},"
+        #               "RFs={!s},"
+        #               "EF={:d},"
+        #               "c={:.2f},"
+        #               "delta={:.2f},"
+        #               "e={:.0e}").format(*params)
+        if args.param_filter == "error_free":
+            legend_str = "RF = {:d}, EF = {:d}".format(RFs[0], EF)
+        else:
+            legend_str = "e = {:.02f}".format(iid_per)
 
         typestr = 'mib'
         if all(rf == 1 for rf in RFs) or len(Ks) == 1:
